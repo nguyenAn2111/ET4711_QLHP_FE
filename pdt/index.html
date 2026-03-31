@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Demo giao diện PĐT - Trang chủ</title>
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/layout.css" />
+  <link rel="stylesheet" href="assets/css/dashboard.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="sidebar-top">
+        <div class="brand">PHÒNG ĐÀO TẠO</div>
+        <nav class="menu">
+          <a href="#" class="menu-item active" data-page="course-management-page">Quản lý học phần</a>
+          <a href="#" class="menu-item" data-page="course-approval-page">Duyệt đăng ký học phần</a>
+          <a href="#" class="menu-item" data-page="course-setting-page">Cài đặt học phần</a>
+          <a href="#" class="menu-item" data-page="semester-setting-page">Cài đặt kỳ học</a>
+        </nav>
+      </div>
+
+      <div class="logout-wrap">
+        <button class="logout-btn">Đăng xuất</button>
+      </div>
+    </aside>
+
+    <main class="content">
+      <div class="topbar">
+        <div class="topbar-title">Hệ thống quản lý đăng ký học phần</div>
+        <div class="topbar-user">
+          Xin chào, <strong id="currentUser">pdt</strong>
+        </div>
+      </div>
+
+      <!-- TAB 1: QUẢN LÝ HỌC PHẦN -->
+      <section id="course-management-page" class="page-section active">
+        <section class="panel">
+          <div class="filter-row course-filter-row">
+            <label for="semester">Học kỳ:</label>
+            <select id="semester">
+              <option selected>20252</option>
+              <option>20251</option>
+              <option>20242</option>
+            </select>
+
+            <label for="search">Tìm kiếm:</label>
+            <input id="search" type="text" />
+
+            <label for="status">Trạng thái:</label>
+            <select id="status">
+              <option selected>Tất cả</option>
+              <option>Đang mở</option>
+              <option>Đóng</option>
+            </select>
+
+            <div></div>
+            <div class="actions">
+              <button class="btn btn-green" id="openAllBtn">Mở tất cả</button>
+              <button class="btn btn-red" id="closeAllBtn">Đóng tất cả</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="section-title">Danh sách học phần mở trong kỳ</div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 140px;">Mã học phần</th>
+                  <th>Tên học phần</th>
+                  <th style="width: 140px;">Loại học phần</th>
+                  <th style="width: 210px;">Thời gian mở</th>
+                  <th style="width: 120px;">Trạng thái</th>
+                  <th style="width: 140px;">Số lượng đăng ký</th>
+                  <th style="width: 150px;">Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="courseTableBody">
+                <tr data-status="Đang mở">
+                  <td>CT101</td>
+                  <td>Lập trình cơ bản</td>
+                  <td>Tự chọn</td>
+                  <td>08/01/2026 đến 08/04/2026</td>
+                  <td class="status-text">Đang mở</td>
+                  <td>0</td>
+                  <td class="action-cell"><button class="mini-btn red toggle-btn">Đóng</button></td>
+                </tr>
+                <tr data-status="Đang mở">
+                  <td>CT102</td>
+                  <td>Cấu trúc dữ liệu</td>
+                  <td>Tự chọn</td>
+                  <td>08/01/2026 đến 08/04/2026</td>
+                  <td class="status-text">Đang mở</td>
+                  <td>0</td>
+                  <td class="action-cell"><button class="mini-btn red toggle-btn">Đóng</button></td>
+                </tr>
+                <tr data-status="Đang mở">
+                  <td>EE201</td>
+                  <td>Mạch điện 1</td>
+                  <td>Tự chọn</td>
+                  <td>08/01/2026 đến 08/04/2026</td>
+                  <td class="status-text">Đang mở</td>
+                  <td>0</td>
+                  <td class="action-cell"><button class="mini-btn red toggle-btn">Đóng</button></td>
+                </tr>
+                <tr data-status="Đang mở">
+                  <td>MA101</td>
+                  <td>Giải tích 1</td>
+                  <td>Cơ sở</td>
+                  <td>08/01/2026 đến 08/04/2026</td>
+                  <td class="status-text">Đang mở</td>
+                  <td>0</td>
+                  <td class="action-cell"><button class="mini-btn red toggle-btn">Đóng</button></td>
+                </tr>
+                <tr data-status="Đang mở">
+                  <td>PE101</td>
+                  <td>Giáo dục thể chất</td>
+                  <td>Bắt buộc</td>
+                  <td>08/01/2026 đến 08/04/2026</td>
+                  <td class="status-text">Đang mở</td>
+                  <td>0</td>
+                  <td class="action-cell"><button class="mini-btn red toggle-btn">Đóng</button></td>
+                </tr>
+                <tr data-status="Đang mở">
+                  <td>PE2101</td>
+                  <td>Bóng chuyền 1</td>
+                  <td>Bắt buộc</td>
+                  <td>08/01/2026 đến 08/04/2026</td>
+                  <td class="status-text">Đang mở</td>
+                  <td>0</td>
+                  <td class="action-cell"><button class="mini-btn red toggle-btn">Đóng</button></td>
+                </tr>
+                <tr data-status="Đang mở">
+                  <td>PE2151</td>
+                  <td>Erobic</td>
+                  <td>Bắt buộc</td>
+                  <td>08/01/2026 đến 08/04/2026</td>
+                  <td class="status-text">Đang mở</td>
+                  <td>0</td>
+                  <td class="action-cell"><button class="mini-btn red toggle-btn">Đóng</button></td>
+                </tr>
+                <tr data-status="Đang mở">
+                  <td>PE2201</td>
+                  <td>Bóng đá 1</td>
+                  <td>Bắt buộc</td>
+                  <td>08/01/2026 đến 08/04/2026</td>
+                  <td class="status-text">Đang mở</td>
+                  <td>0</td>
+                  <td class="action-cell"><button class="mini-btn red toggle-btn">Đóng</button></td>
+                </tr>
+                <tr data-status="Đóng">
+                  <td>PE2251</td>
+                  <td>Taekwondo 1</td>
+                  <td>Bắt buộc</td>
+                  <td>08/01/2026 đến 08/04/2026</td>
+                  <td class="status-text">Đóng</td>
+                  <td>0</td>
+                  <td class="action-cell"><button class="mini-btn green toggle-btn">Mở</button></td>
+                </tr>
+                <tr data-status="Đóng">
+                  <td>PE2301</td>
+                  <td>Bóng rổ 1</td>
+                  <td>Bắt buộc</td>
+                  <td>08/01/2026 đến 08/04/2026</td>
+                  <td class="status-text">Đóng</td>
+                  <td>0</td>
+                  <td class="action-cell"><button class="mini-btn green toggle-btn">Mở</button></td>
+                </tr>
+                <tr data-status="Đóng">
+                  <td>PE2401</td>
+                  <td>Bóng bàn 1</td>
+                  <td>Bắt buộc</td>
+                  <td>08/01/2026 đến 08/04/2026</td>
+                  <td class="status-text">Đóng</td>
+                  <td>0</td>
+                  <td class="action-cell"><button class="mini-btn green toggle-btn">Mở</button></td>
+                </tr>
+                <tr data-status="Đóng">
+                  <td>PE2501</td>
+                  <td>Cầu lông 1</td>
+                  <td>Bắt buộc</td>
+                  <td>08/01/2026 đến 08/04/2026</td>
+                  <td class="status-text">Đóng</td>
+                  <td>0</td>
+                  <td class="action-cell"><button class="mini-btn green toggle-btn">Mở</button></td>
+                </tr>
+                <tr data-status="Đóng">
+                  <td>PE2601</td>
+                  <td>Bơi lội 1</td>
+                  <td>Bắt buộc</td>
+                  <td>08/01/2026 đến 08/04/2026</td>
+                  <td class="status-text">Đóng</td>
+                  <td>0</td>
+                  <td class="action-cell"><button class="mini-btn green toggle-btn">Mở</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <!-- TAB 2: DUYỆT ĐĂNG KÝ HỌC PHẦN -->
+      <section id="course-approval-page" class="page-section">
+        <section class="panel">
+          <div class="filter-row approval-filter-row">
+            <label for="approvalSearch">Tìm kiếm:</label>
+            <input id="approvalSearch" type="text" />
+
+            <label for="approvalStatus">Trạng thái:</label>
+            <select id="approvalStatus">
+              <option selected>Tất cả</option>
+              <option>Chờ duyệt</option>
+              <option>Đã duyệt</option>
+              <option>Từ chối</option>
+            </select>
+
+            <label for="approvalSemester">Học kỳ:</label>
+            <select id="approvalSemester">
+              <option selected>Tất cả</option>
+              <option>20252</option>
+              <option>20251</option>
+            </select>
+
+            <label for="approvalFaculty">Khoa/Viện:</label>
+            <select id="approvalFaculty">
+              <option selected>Tất cả</option>
+              <option>CNTT</option>
+              <option>Điện</option>
+              <option>Cơ khí</option>
+            </select>
+
+            <div class="actions">
+              <button class="btn btn-green" id="approveAllBtn">Duyệt tất cả</button>
+              <button class="btn btn-red" id="rejectAllBtn">Từ chối tất cả</button>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="section-title">Danh sách đăng ký học phần của sinh viên</div>
+          <div class="table-wrap approval-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 120px;">Mã đăng ký</th>
+                  <th style="width: 180px;">Tên sinh viên</th>
+                  <th style="width: 120px;">Mã SV</th>
+                  <th style="width: 160px;">Khoa/Viện</th>
+                  <th style="width: 140px;">Mã học phần</th>
+                  <th>Tên học phần</th>
+                  <th style="width: 140px;">Trạng thái</th>
+                  <th style="width: 180px;">Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="approvalTableBody">
+                <tr data-status="Chờ duyệt" data-faculty="CNTT" data-semester="20252">
+                  <td>DK001</td>
+                  <td>Nguyễn Văn A</td>
+                  <td>20230001</td>
+                  <td>CNTT</td>
+                  <td>CT101</td>
+                  <td>Lập trình cơ bản</td>
+                  <td class="approval-status-text">Chờ duyệt</td>
+                  <td class="action-cell approval-actions">
+                    <button class="mini-btn green approve-btn">Duyệt</button>
+                    <button class="mini-btn red reject-btn">Từ chối</button>
+                  </td>
+                </tr>
+                <tr data-status="Chờ duyệt" data-faculty="Điện" data-semester="20252">
+                  <td>DK002</td>
+                  <td>Trần Thị B</td>
+                  <td>20230002</td>
+                  <td>Điện</td>
+                  <td>EE201</td>
+                  <td>Mạch điện 1</td>
+                  <td class="approval-status-text">Chờ duyệt</td>
+                  <td class="action-cell approval-actions">
+                    <button class="mini-btn green approve-btn">Duyệt</button>
+                    <button class="mini-btn red reject-btn">Từ chối</button>
+                  </td>
+                </tr>
+                <tr data-status="Đã duyệt" data-faculty="CNTT" data-semester="20252">
+                  <td>DK003</td>
+                  <td>Lê Minh C</td>
+                  <td>20230003</td>
+                  <td>CNTT</td>
+                  <td>CT102</td>
+                  <td>Cấu trúc dữ liệu</td>
+                  <td class="approval-status-text">Đã duyệt</td>
+                  <td class="action-cell approval-actions">
+                    <button class="mini-btn gray disabled-btn" disabled>Đã duyệt</button>
+                  </td>
+                </tr>
+                <tr data-status="Từ chối" data-faculty="Cơ khí" data-semester="20251">
+                  <td>DK004</td>
+                  <td>Phạm Quốc D</td>
+                  <td>20230004</td>
+                  <td>Cơ khí</td>
+                  <td>MA101</td>
+                  <td>Giải tích 1</td>
+                  <td class="approval-status-text">Từ chối</td>
+                  <td class="action-cell approval-actions">
+                    <button class="mini-btn gray disabled-btn" disabled>Đã từ chối</button>
+                  </td>
+                </tr>
+                <tr data-status="Chờ duyệt" data-faculty="CNTT" data-semester="20252">
+                  <td>DK005</td>
+                  <td>Hoàng Gia E</td>
+                  <td>20230005</td>
+                  <td>CNTT</td>
+                  <td>PE2201</td>
+                  <td>Bóng đá 1</td>
+                  <td class="approval-status-text">Chờ duyệt</td>
+                  <td class="action-cell approval-actions">
+                    <button class="mini-btn green approve-btn">Duyệt</button>
+                    <button class="mini-btn red reject-btn">Từ chối</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <!-- TAB 3: CÀI ĐẶT HỌC PHẦN -->
+      <section id="course-setting-page" class="page-section">
+        <section class="panel">
+          <div class="filter-row course-setting-filter-row">
+            <label for="settingSearch">Tìm kiếm:</label>
+            <input id="settingSearch" type="text" />
+
+            <label for="settingCourseType">Loại học phần:</label>
+            <select id="settingCourseType">
+              <option selected>Tất cả</option>
+              <option>Tự chọn</option>
+              <option>Cơ sở</option>
+              <option>Bắt buộc</option>
+            </select>
+          </div>
+        </section>
+
+        <div class="split-layout">
+          <section class="panel">
+            <div class="section-title">Thông tin học phần</div>
+
+            <div class="form-group">
+              <label for="courseCodeInput">Mã học phần:</label>
+              <input id="courseCodeInput" type="text" />
+            </div>
+
+            <div class="form-group">
+              <label for="courseNameInput">Tên học phần:</label>
+              <input id="courseNameInput" type="text" />
+            </div>
+
+            <div class="form-group">
+              <label for="courseCreditInput">Số tín chỉ:</label>
+              <input id="courseCreditInput" type="number" min="1" value="2" />
+            </div>
+
+            <div class="form-group">
+              <label for="courseTypeInput">Loại học phần:</label>
+              <select id="courseTypeInput">
+                <option>Tự chọn</option>
+                <option>Cơ sở</option>
+                <option selected>Bắt buộc</option>
+              </select>
+            </div>
+
+            <div class="form-actions">
+              <button class="btn btn-blue" id="addCourseBtn">Thêm mới</button>
+              <button class="btn btn-green" id="updateCourseBtn">Cập nhật</button>
+              <button class="btn btn-red" id="deleteCourseBtn">Xóa</button>
+              <button class="btn btn-light" id="resetCourseBtn">Làm mới</button>
+            </div>
+          </section>
+
+          <section class="panel">
+            <div class="section-title">Danh sách học phần</div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th style="width: 110px;">Mã học phần</th>
+                    <th>Tên học phần</th>
+                    <th style="width: 90px;">Số tín chỉ</th>
+                    <th style="width: 140px;">Loại học phần</th>
+                    <th style="width: 120px;">Hành động</th>
+                  </tr>
+                </thead>
+                <tbody id="settingCourseTableBody">
+                  <tr data-code="CT101" data-name="Lập trình cơ bản" data-credit="3" data-type="Tự chọn">
+                    <td>CT101</td>
+                    <td>Lập trình cơ bản</td>
+                    <td>3</td>
+                    <td>Tự chọn</td>
+                    <td class="action-cell"><button class="mini-btn blue edit-course-btn">Sửa</button></td>
+                  </tr>
+                  <tr data-code="CT102" data-name="Cấu trúc dữ liệu" data-credit="3" data-type="Tự chọn">
+                    <td>CT102</td>
+                    <td>Cấu trúc dữ liệu</td>
+                    <td>3</td>
+                    <td>Tự chọn</td>
+                    <td class="action-cell"><button class="mini-btn blue edit-course-btn">Sửa</button></td>
+                  </tr>
+                  <tr data-code="EE201" data-name="Mạch điện 1" data-credit="3" data-type="Tự chọn">
+                    <td>EE201</td>
+                    <td>Mạch điện 1</td>
+                    <td>3</td>
+                    <td>Tự chọn</td>
+                    <td class="action-cell"><button class="mini-btn blue edit-course-btn">Sửa</button></td>
+                  </tr>
+                  <tr data-code="MA101" data-name="Giải tích 1" data-credit="4" data-type="Cơ sở">
+                    <td>MA101</td>
+                    <td>Giải tích 1</td>
+                    <td>4</td>
+                    <td>Cơ sở</td>
+                    <td class="action-cell"><button class="mini-btn blue edit-course-btn">Sửa</button></td>
+                  </tr>
+                  <tr data-code="PE101" data-name="Giáo dục thể chất" data-credit="2" data-type="Bắt buộc">
+                    <td>PE101</td>
+                    <td>Giáo dục thể chất</td>
+                    <td>2</td>
+                    <td>Bắt buộc</td>
+                    <td class="action-cell"><button class="mini-btn blue edit-course-btn">Sửa</button></td>
+                  </tr>
+                  <tr data-code="PE2101" data-name="Bóng chuyền 1" data-credit="3" data-type="Bắt buộc">
+                    <td>PE2101</td>
+                    <td>Bóng chuyền 1</td>
+                    <td>3</td>
+                    <td>Bắt buộc</td>
+                    <td class="action-cell"><button class="mini-btn blue edit-course-btn">Sửa</button></td>
+                  </tr>
+                  <tr data-code="PE2151" data-name="Erobic" data-credit="3" data-type="Bắt buộc">
+                    <td>PE2151</td>
+                    <td>Erobic</td>
+                    <td>3</td>
+                    <td>Bắt buộc</td>
+                    <td class="action-cell"><button class="mini-btn blue edit-course-btn">Sửa</button></td>
+                  </tr>
+                  <tr data-code="PE2201" data-name="Bóng đá 1" data-credit="3" data-type="Bắt buộc">
+                    <td>PE2201</td>
+                    <td>Bóng đá 1</td>
+                    <td>3</td>
+                    <td>Bắt buộc</td>
+                    <td class="action-cell"><button class="mini-btn blue edit-course-btn">Sửa</button></td>
+                  </tr>
+                  <tr data-code="PE2251" data-name="Taekwondo 1" data-credit="3" data-type="Bắt buộc">
+                    <td>PE2251</td>
+                    <td>Taekwondo 1</td>
+                    <td>3</td>
+                    <td>Bắt buộc</td>
+                    <td class="action-cell"><button class="mini-btn blue edit-course-btn">Sửa</button></td>
+                  </tr>
+                  <tr data-code="PE2301" data-name="Bóng rổ 1" data-credit="3" data-type="Bắt buộc">
+                    <td>PE2301</td>
+                    <td>Bóng rổ 1</td>
+                    <td>3</td>
+                    <td>Bắt buộc</td>
+                    <td class="action-cell"><button class="mini-btn blue edit-course-btn">Sửa</button></td>
+                  </tr>
+                  <tr data-code="PE2401" data-name="Bóng bàn 1" data-credit="3" data-type="Bắt buộc">
+                    <td>PE2401</td>
+                    <td>Bóng bàn 1</td>
+                    <td>3</td>
+                    <td>Bắt buộc</td>
+                    <td class="action-cell"><button class="mini-btn blue edit-course-btn">Sửa</button></td>
+                  </tr>
+                  <tr data-code="PE2501" data-name="Cầu lông 1" data-credit="3" data-type="Bắt buộc">
+                    <td>PE2501</td>
+                    <td>Cầu lông 1</td>
+                    <td>3</td>
+                    <td>Bắt buộc</td>
+                    <td class="action-cell"><button class="mini-btn blue edit-course-btn">Sửa</button></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <!-- TAB 4: CÀI ĐẶT KỲ HỌC -->
+      <section id="semester-setting-page" class="page-section">
+        <section class="panel">
+          <div class="section-title">Bộ lọc tìm kiếm</div>
+          <div class="filter-row semester-filter-row">
+            <label for="semesterKeyword">TỪ KHÓA:</label>
+            <input id="semesterKeyword" type="text" />
+            <button class="btn btn-blue" id="semesterSearchBtn">Lọc</button>
+            <button class="btn btn-green" id="createSemesterBtn">+ Tạo học kỳ mới</button>
+          </div>
+        </section>
+
+        <section class="panel">
+          <div class="section-title">Danh sách học kỳ</div>
+          <div class="table-wrap semester-table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 140px;">Mã học kỳ</th>
+                  <th>Tên học kỳ</th>
+                  <th style="width: 160px;">Năm học</th>
+                  <th style="width: 220px;">Thời gian</th>
+                  <th style="width: 160px;">Trạng thái</th>
+                  <th style="width: 160px;">Hành động</th>
+                </tr>
+              </thead>
+              <tbody id="semesterTableBody">
+                <tr data-keyword="20252 Học kỳ 2 Năm học 2025 2025-2026 Đang hoạt động">
+                  <td>20252</td>
+                  <td>Học kỳ 2 Năm học 2025</td>
+                  <td>2025-2026</td>
+                  <td>08/01/2026 đến 08/04/2026</td>
+                  <td class="status-active">Đang hoạt động</td>
+                  <td class="action-cell semester-actions">
+                    <button class="mini-btn blue">Sửa</button>
+                    <button class="mini-btn red">Xóa</button>
+                  </td>
+                </tr>
+                <tr data-keyword="20251 Học kỳ 1 Năm học 2025 2025-2026 Đã kết thúc">
+                  <td>20251</td>
+                  <td>Học kỳ 1 Năm học 2025</td>
+                  <td>2025-2026</td>
+                  <td>01/09/2025 đến 01/01/2026</td>
+                  <td class="status-ended">Đã kết thúc</td>
+                  <td class="action-cell semester-actions">
+                    <button class="mini-btn blue">Sửa</button>
+                    <button class="mini-btn red">Xóa</button>
+                  </td>
+                </tr>
+                <tr data-keyword="20242 Học kỳ 2 Năm học 2024 2024-2025 Đã kết thúc">
+                  <td>20242</td>
+                  <td>Học kỳ 2 Năm học 2024</td>
+                  <td>2024-2025</td>
+                  <td>01/02/2024 đến 01/06/2024</td>
+                  <td class="status-ended">Đã kết thúc</td>
+                  <td class="action-cell semester-actions">
+                    <button class="mini-btn blue">Sửa</button>
+                    <button class="mini-btn red">Xóa</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <div class="footer">© 2025 University Portal. All rights reserved.</div>
+    </main>
+  </div>
+
+  <script src="assets/js/auth.js"></script>
+  <script src="assets/js/navigation.js"></script>
+  <script src="assets/js/course-management.js"></script>
+  <script src="assets/js/course-approval.js"></script>
+  <script src="assets/js/course-setting.js"></script>
+  <script src="assets/js/semester-setting.js"></script>
+  <script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Đăng nhập - Hệ thống đăng ký học phần</title>
+  <link rel="stylesheet" href="assets/css/base.css" />
+  <link rel="stylesheet" href="assets/css/login.css" />
+</head>
+<body>
+  <div class="login-page">
+    <header class="login-header">
+      <h1>TRƯỜNG ĐẠI HỌC</h1>
+    </header>
+
+    <main class="login-main">
+      <div class="login-card">
+        <h2>ĐĂNG NHẬP HỆ THỐNG</h2>
+
+        <form id="loginForm">
+          <div class="form-group">
+            <label for="username">Tài khoản / Email:</label>
+            <input type="text" id="username" autocomplete="username" />
+          </div>
+
+          <div class="form-group">
+            <label for="password">Mật khẩu:</label>
+            <input type="password" id="password" autocomplete="current-password" />
+          </div>
+
+          <a href="#" class="forgot-link">Quên mật khẩu?</a>
+
+          <button type="submit" class="login-btn">Đăng nhập</button>
+          <button type="button" class="register-btn">Tạo tài khoản sinh viên</button>
+
+          <p id="loginMessage" class="login-message"></p>
+        </form>
+      </div>
+    </main>
+
+    <footer class="login-footer">
+      <div>© 2025 Trường Đại Học • Trung tâm CNTT – Hotline: 0296 3831 265</div>
+      <div>Cổng dịch vụ sinh viên • v1.0</div>
+    </footer>
+  </div>
+
+  <script src="assets/js/login.js"></script>
+</body>
+</html>

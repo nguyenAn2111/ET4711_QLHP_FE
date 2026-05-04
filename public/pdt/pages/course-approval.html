@@ -3,10 +3,16 @@
   <!-- FILTER -->
   <section class="panel">
     <div class="filter-row approval-filter-row">
+      <label for="approvalSemester">Học kỳ:</label>
+      <select id="approvalSemester">
+        <option value="ALL" selected>Tất cả</option>
+        <option value="2025.2">2025.2</option>
+        <option value="2025.1">2025.1</option>
+      </select>
 
       <label for="approvalSearch">Tìm kiếm:</label>
       <input id="approvalSearch" type="text" placeholder="Nhập tên SV / học phần..." />
-
+      
       <label for="approvalStatus">Trạng thái:</label>
       <select id="approvalStatus">
         <option value="ALL" selected>Tất cả</option>
@@ -15,12 +21,6 @@
         <option value="REJECTED">Từ chối</option>
       </select>
 
-      <label for="approvalSemester">Học kỳ:</label>
-      <select id="approvalSemester">
-        <option value="ALL" selected>Tất cả</option>
-        <option value="20252">2025.2</option>
-        <option value="20251">2025.1</option>
-      </select>
 
       <label for="approvalFaculty">Khoa/Viện:</label>
       <select id="approvalFaculty">

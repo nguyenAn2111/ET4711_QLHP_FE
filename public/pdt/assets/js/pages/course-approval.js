@@ -1,261 +1,93 @@
-// function initApprovalManagement() {
-
-//     const tableBody = document.getElementById("approvalTableBody")
-
-//     if (!tableBody) {
-//         return
-//     }
-
-//     // ================= FETCH DATA =================
-//     fetch("http://localhost:4711/api/v1.0/pdt/registration/list-all")
-//         .then(res => res.json())
-//         .then(res => {
-//             console.log("API data:", res)
-//             renderTable(res.data)
-//         })
-//         .catch(err => {
-//             console.error("API error:", err)
-//         })
-
-
-//     // ================= RENDER TABLE =================
-//     function renderTable(registrations) {
-
-//         tableBody.innerHTML = ""
-
-//         const statusMap = {
-//             "WAITING": "Chờ duyệt",
-//             "APPROVED": "Đã duyệt",
-//             "DECLINED": "Từ chối"
-//         }
-
-//         registrations.forEach(reg => {
-
-//             const statusText = statusMap[reg.status] || reg.status
-
-//             let actionHtml = ""
-
-//             if (reg.status === "WAITING") {
-//                 actionHtml = `
-//                     <button class="mini-btn green approve-btn" data-id="${reg.id}">Duyệt</button>
-//                     <button class="mini-btn red reject-btn" data-id="${reg.id}">Từ chối</button>
-//                 `
-//             } else if (reg.status === "APPROVED") {
-//                 actionHtml = `
-//                     <button class="mini-btn gray disabled-btn" disabled>Đã duyệt</button>
-//                 `
-//             } else {
-//                 actionHtml = `
-//                     <button class="mini-btn gray disabled-btn" disabled>Đã từ chối</button>
-//                 `
-//             }
-
-//             const row = document.createElement("tr")
-
-//             row.innerHTML = `
-//                 <td>${reg.code}</td>
-//                 <td>${reg.student_name}</td>
-//                 <td>${reg.student_code}</td>
-//                 <td>${reg.student_unit}</td>
-//                 <td>${reg.course_code}</td>
-//                 <td>${reg.course_name}</td>
-//                 <td class="approval-status-text">${statusText}</td>
-//                 <td class="action-cell approval-actions">
-//                     ${actionHtml}
-//                 </td>
-//             `
-
-//             tableBody.appendChild(row)
-//         })
-//     }
-
-
-//     // ================= BUTTON ALL =================
-//     const approveAllBtn = document.getElementById("approveAllBtn")
-//     const rejectAllBtn = document.getElementById("rejectAllBtn")
-
-//     approveAllBtn.addEventListener("click", () => {
-//         fetch("http://localhost:4711/api/v1.0/pdt/registration/approveAll", {
-//             method: "PUT"
-//         })
-//             .then(res => res.json())
-//             .then(() => {
-//                 console.log("✅ Approve all success")
-//                 reloadData()
-//             })
-//             .catch(err => console.error(err))
-//     })
-
-//     rejectAllBtn.addEventListener("click", () => {
-//         fetch("http://localhost:4711/api/v1.0/pdt/registration/rejectAll", {
-//             method: "PUT"
-//         })
-//             .then(res => res.json())
-//             .then(() => {
-//                 console.log("✅ Reject all success")
-//                 reloadData()
-//             })
-//             .catch(err => console.error(err))
-//     })
-
-
-//     // ================= CLICK ACTION =================
-//     tableBody.addEventListener("click", (e) => {
-
-//         const btn = e.target
-
-//         // APPROVE
-//         if (btn.classList.contains("approve-btn")) {
-//             const id = btn.dataset.id
-
-//             fetch(`http://localhost:4711/api/v1.0/pdt/registration/approve?id=${id}`, {
-//                 method: "PUT"
-//             })
-//                 .then(res => res.json())
-//                 .then(() => {
-//                     console.log("✅ Approve success")
-//                     reloadData()
-//                 })
-//                 .catch(err => console.error(err))
-//         }
-
-//         // REJECT
-//         if (btn.classList.contains("reject-btn")) {
-//             const id = btn.dataset.id
-
-//             fetch(`http://localhost:4711/api/v1.0/pdt/registration/reject?id=${id}`, {
-//                 method: "PUT"
-//             })
-//                 .then(res => res.json())
-//                 .then(() => {
-//                     console.log("✅ Reject success")
-//                     reloadData()
-//                 })
-//                 .catch(err => console.error(err))
-//         }
-
-//     })
-
-
-//     // ================= RELOAD =================
-//     function reloadData() {
-//         fetch("http://localhost:4711/api/v1.0/pdt/registration/list-all")
-//             .then(res => res.json())
-//             .then(res => renderTable(res.data))
-//     }
-// }
 function initApprovalManagement() {
 
     const tableBody = document.getElementById("approvalTableBody")
-
     if (!tableBody) return
 
-    // ================= MODAL =================
-    const createBtn = document.getElementById("createRegBtn")
-    const modal = document.getElementById("createRegModal")
-    const closeModalBtn = document.getElementById("closeCreateRegModal")
-    const submitBtn = document.getElementById("submitCreateReg")
+    // ================= STATE =================
+    let debounceTimer
 
-    const inputStudent = document.getElementById("reg_student_code")
-    const inputCourse = document.getElementById("reg_course_code")
+    // ================= ELEMENT =================
+    const el = {
+        search: document.getElementById("approvalSearch"),
+        status: document.getElementById("approvalStatus"),
+        term: document.getElementById("approvalSemester"),
+        unit: document.getElementById("approvalFaculty"),
 
-    // open modal
-    createBtn?.addEventListener("click", () => {
-        modal.classList.remove("hidden")
-    })
+        approveAllBtn: document.getElementById("approveAllBtn"),
+        rejectAllBtn: document.getElementById("rejectAllBtn"),
 
-    // close modal
-    closeModalBtn?.addEventListener("click", () => {
-        closeModal()
-    })
+        // modal
+        modal: document.getElementById("createRegModal"),
+        openModalBtn: document.getElementById("createRegBtn"),
+        closeModalBtn: document.getElementById("closeCreateRegModal"),
+        submitBtn: document.getElementById("submitCreateReg"),
 
-    function closeModal() {
-        modal.classList.add("hidden")
-        resetForm()
+        studentInput: document.getElementById("reg_student_code"),
+        courseInput: document.getElementById("reg_course_code")
     }
 
-    function resetForm() {
-        inputStudent.value = ""
-        inputCourse.value = ""
+    // ================= API =================
+    const API = {
+        FILTER: "http://localhost:4711/api/v1.0/pdt/registration/list",
+        CREATE: "http://localhost:4711/api/v1.0/pdt/registration/PDT/create",
+        APPROVE: id => `http://localhost:4711/api/v1.0/pdt/registration/approve?id=${id}`,
+        REJECT: id => `http://localhost:4711/api/v1.0/pdt/registration/reject?id=${id}`,
+        APPROVE_ALL: "http://localhost:4711/api/v1.0/pdt/registration/approveAll",
+        REJECT_ALL: "http://localhost:4711/api/v1.0/pdt/registration/rejectAll"
     }
 
-    // submit create registration
-    submitBtn?.addEventListener("click", () => {
-
-        const studentCode = inputStudent.value.trim()
-        const courseCode = inputCourse.value.trim()
-
-        if (!studentCode || !courseCode) {
-            alert("Vui lòng nhập đầy đủ thông tin")
-            return
-        }
-
-        fetch("http://localhost:4711/api/v1.0/pdt/registration/PDT/create", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                student_code: studentCode,
-                course_code: courseCode
-            })
-        })
-            .then(res => res.json())
-            .then(res => {
-                console.log("✅ Create success:", res)
-
-                closeModal()
-                reloadData()
-            })
-            .catch(err => {
-                console.error("❌ Create error:", err)
-            })
-    })
-
-
-    // ================= FETCH DATA =================
-    loadData()
-
+    // ================= LOAD DATA =================
     function loadData() {
-        fetch("http://localhost:4711/api/v1.0/pdt/registration/list-all")
+
+        const keyword = el.search.value.trim()
+        const status = el.status.value
+        const term = el.term.value
+        const unit = el.unit.value
+
+        const params = new URLSearchParams()
+
+        if (keyword) params.append("keyword", keyword)
+        if (status !== "ALL") params.append("status", status)
+        if (term !== "ALL") params.append("term", term)
+        if (unit !== "ALL") params.append("unit", unit)
+
+        const url = `${API.FILTER}?${params.toString()}`
+
+        tableBody.innerHTML = `<tr><td colspan="8">Loading...</td></tr>`
+
+        fetch(url)
             .then(res => res.json())
-            .then(res => {
-                console.log("API data:", res)
-                renderTable(res.data)
-            })
+            .then(res => renderTable(res.data))
             .catch(err => console.error(err))
     }
 
-
-    // ================= RENDER TABLE =================
-    function renderTable(registrations) {
+    // ================= RENDER =================
+    function renderTable(data) {
 
         tableBody.innerHTML = ""
 
         const statusMap = {
-            "WAITING": "Chờ duyệt",
-            "APPROVED": "Đã duyệt",
-            "DECLINED": "Từ chối"
+            WAITING: "Chờ duyệt",
+            APPROVED: "Đã duyệt",
+            DECLINED: "Từ chối"
         }
 
-        registrations.forEach(reg => {
+        data.forEach(reg => {
 
             const statusText = statusMap[reg.status] || reg.status
 
-            let actionHtml = ""
+            let actions = ""
 
             if (reg.status === "WAITING") {
-                actionHtml = `
+                actions = `
                     <button class="mini-btn green approve-btn" data-id="${reg.id}">Duyệt</button>
                     <button class="mini-btn red reject-btn" data-id="${reg.id}">Từ chối</button>
                 `
-            } else if (reg.status === "APPROVED") {
-                actionHtml = `
-                    <button class="mini-btn gray disabled-btn" disabled>Đã duyệt</button>
-                `
             } else {
-                actionHtml = `
-                    <button class="mini-btn gray disabled-btn" disabled>Đã từ chối</button>
+                actions = `
+                    <button class="mini-btn gray disabled-btn" disabled>
+                        ${statusText}
+                    </button>
                 `
             }
 
@@ -269,85 +101,90 @@ function initApprovalManagement() {
                 <td>${reg.course_code}</td>
                 <td>${reg.course_name}</td>
                 <td class="approval-status-text">${statusText}</td>
-                <td class="action-cell approval-actions">
-                    ${actionHtml}
-                </td>
+                <td class="action-cell">${actions}</td>
             `
 
             tableBody.appendChild(row)
         })
     }
 
-
-    // ================= BUTTON ALL =================
-    const approveAllBtn = document.getElementById("approveAllBtn")
-    const rejectAllBtn = document.getElementById("rejectAllBtn")
-
-    approveAllBtn?.addEventListener("click", () => {
-        fetch("http://localhost:4711/api/v1.0/pdt/registration/approveAll", {
-            method: "PUT"
-        })
-            .then(res => res.json())
-            .then(() => {
-                console.log("✅ Approve all success")
-                reloadData()
-            })
-            .catch(err => console.error(err))
+    // ================= EVENTS FILTER =================
+    el.search.addEventListener("input", () => {
+        clearTimeout(debounceTimer)
+        debounceTimer = setTimeout(loadData, 400)
     })
 
-    rejectAllBtn?.addEventListener("click", () => {
-        fetch("http://localhost:4711/api/v1.0/pdt/registration/rejectAll", {
-            method: "PUT"
-        })
-            .then(res => res.json())
-            .then(() => {
-                console.log("✅ Reject all success")
-                reloadData()
-            })
-            .catch(err => console.error(err))
-    })
+    el.status.addEventListener("change", loadData)
+    el.term.addEventListener("change", loadData)
+    el.unit.addEventListener("change", loadData)
 
-
-    // ================= CLICK ACTION =================
+    // ================= ACTION BUTTON =================
     tableBody.addEventListener("click", (e) => {
 
         const btn = e.target
+        const id = btn.dataset.id
 
-        // APPROVE
         if (btn.classList.contains("approve-btn")) {
-            const id = btn.dataset.id
-
-            fetch(`http://localhost:4711/api/v1.0/pdt/registration/approve?id=${id}`, {
-                method: "PUT"
-            })
-                .then(res => res.json())
-                .then(() => {
-                    console.log("✅ Approve success")
-                    reloadData()
-                })
-                .catch(err => console.error(err))
+            fetch(API.APPROVE(id), { method: "PUT" })
+                .then(() => loadData())
         }
 
-        // REJECT
         if (btn.classList.contains("reject-btn")) {
-            const id = btn.dataset.id
-
-            fetch(`http://localhost:4711/api/v1.0/pdt/registration/reject?id=${id}`, {
-                method: "PUT"
-            })
-                .then(res => res.json())
-                .then(() => {
-                    console.log("✅ Reject success")
-                    reloadData()
-                })
-                .catch(err => console.error(err))
+            fetch(API.REJECT(id), { method: "PUT" })
+                .then(() => loadData())
         }
-
     })
 
+    // ================= APPROVE ALL =================
+    el.approveAllBtn?.addEventListener("click", () => {
+        fetch(API.APPROVE_ALL, { method: "PUT" })
+            .then(() => loadData())
+    })
 
-    // ================= RELOAD =================
-    function reloadData() {
-        loadData()
+    el.rejectAllBtn?.addEventListener("click", () => {
+        fetch(API.REJECT_ALL, { method: "PUT" })
+            .then(() => loadData())
+    })
+
+    // ================= MODAL =================
+    el.openModalBtn?.addEventListener("click", () => {
+        el.modal.classList.remove("hidden")
+    })
+
+    el.closeModalBtn?.addEventListener("click", closeModal)
+
+    function closeModal() {
+        el.modal.classList.add("hidden")
+        el.studentInput.value = ""
+        el.courseInput.value = ""
     }
+
+    // ================= CREATE =================
+    el.submitBtn?.addEventListener("click", () => {
+
+        const student = el.studentInput.value.trim()
+        const course = el.courseInput.value.trim()
+
+        if (!student || !course) {
+            alert("Nhập đủ thông tin")
+            return
+        }
+
+        fetch(API.CREATE, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                student_code: student,
+                course_code: course
+            })
+        })
+            .then(() => {
+                closeModal()
+                loadData()
+            })
+            .catch(err => console.error(err))
+    })
+
+    // ================= INIT =================
+    loadData()
 }

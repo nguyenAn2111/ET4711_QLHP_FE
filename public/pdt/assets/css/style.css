@@ -116,7 +116,13 @@ body {
   margin-bottom: 20px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.05);
 }
+.form-panel {
+  flex: 0 0 650px;  
+}
 
+.table-panel {
+  flex: 1;          
+}
 .section-title {
   font-size: 16px;
   font-weight: 600;
@@ -327,9 +333,9 @@ tbody tr:hover {
   align-items: flex-start;
 }
 
-.split-layout .panel {
+/* .split-layout .panel {
   flex: 1;
-}
+} */
 /* HEADER ACTION */
 .course-setting-filter-row {
   width: 100%;
